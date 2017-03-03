@@ -70,7 +70,7 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-console.log('admin');
+console.log('admin page!');
 
 /***/ })
 /******/ ]);
