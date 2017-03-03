@@ -1,5 +1,8 @@
 'use strict';
 
-exports.index = function* index() {
-  yield this.render('admin.html');
-};
+exports.index = function* () {
+  const mid = 6;
+  const meta = yield this.service.meta.find(mid);
+
+  yield this.render('admin.html', meta);
+}
