@@ -14,3 +14,20 @@ exports.nunjucks = {
 exports.security = {
   csrf: false
 };
+
+exports.userrole = {
+  failureHandler(action) {
+    switch (action) {
+      case 'admin':
+        this.status = 403;
+        this.redirect('/login');
+        break;
+      default:
+        break;
+    }
+  },
+};
+
+exports.onerror = {
+  errorPageUrl: '/500',
+};
