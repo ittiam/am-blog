@@ -5,7 +5,7 @@ module.exports = app => {
     * insert(title, content, slug) {
       const result = yield app.mysql.insert('article', {
         title,
-        slug: slug,
+        slug,
         content,
         created: app.mysql.literals.now,
         modified: app.mysql.literals.now,
