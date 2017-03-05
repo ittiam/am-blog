@@ -2,7 +2,8 @@
 
 module.exports = app => {
   const admin = app.role.can('admin');
-  const install = app.controller.site.isInstall;
+  // const install = app.controller.site.isInstall;
+  const install = app.middlewares.install();
 
   app.get('/', install, app.controller.article.index);
 

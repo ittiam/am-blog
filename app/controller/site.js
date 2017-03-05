@@ -1,7 +1,5 @@
 'use strict';
 
-let isInstall = false;
-
 const installRule = {
   name: {
     type: 'string',
@@ -14,10 +12,12 @@ const installRule = {
   },
   about: {
     required: false,
+    allowEmpty: true,
     type: 'string',
   },
   sub_name: {
     required: false,
+    allowEmpty: true,
     type: 'string',
   },
 };
@@ -55,26 +55,9 @@ exports.error = function* () {
   yield this.render('500.html');
 };
 
-// 判断是否已经安装博客
-exports.isInstall = function* (ctx, next) {
-
-  if (isInstall) {
-    yield next;
-  } else {
-    // 查询数据库是否已经安装过
-    const isInstallByDB = yield this.service.site.count();
-    if (isInstallByDB) {
-      isInstall = true;
-      yield next;
-    } else {
-      this.redirect('/install');
-    }
-  }
-};
-
 exports.startInstall = function* () {
   yield this.render('install.html', {
-    isInstall,
+    isInstall: this.isInstall
   });
 };
 
@@ -92,9 +75,6 @@ exports.install = function* () {
   const about = this.request.body.about;
   const sub_name = this.request.body.sub_name;
   yield this.service.site.insert(name, email, password, about, sub_name);
-
-
-  isInstall = true;
 
   this.redirect('/manager');
 };
