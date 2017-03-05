@@ -31,7 +31,7 @@ exports.add = function* () {
 
 };
 
-// 新增一个文章
+// 更新文章
 exports.update = function* () {
   const id = this.request.body.id;
   const title = this.request.body.title;
@@ -46,7 +46,6 @@ exports.update = function* () {
   });
 
   this.redirect(`/article?id=${id}`);
-
 };
 
 // 删除一个文章
@@ -62,31 +61,12 @@ exports.deleteArticle = function* () {
   }
 };
 
-exports.upload = function* () {
-  const stream = yield this.getFileStream();
-  const object = yield this.oss.put(moment(Date.now()).format('YYYY-MM-DD') + '/' + stream.filename, stream);
-  if (object) {
-    this.body = {
-      success: 1,           // 0 表示上传失败，1 表示上传成功
-      message: '上传成功',
-      url: object.url,        // 上传成功时才返回
-    };
-  } else {
-    this.body = {
-      success: 0,           // 0 表示上传失败，1 表示上传成功
-      message: '上传失败',
-    };
-  }
-
-};
-
 exports.find = function* () {
   const id = +this.query.id;
   const article = yield this.service.article.find(id);
 
-  article.fromNow = moment(article.modified_time).fromNow();
+  article.fromNow = moment(article.modified).fromNow();
   article.html = marked(article.content);
 
   yield this.render('post.html', article);
-
 };

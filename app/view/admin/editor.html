@@ -25,6 +25,7 @@
         <form action="/article" method="post">
             {% if article.id %}
             <input type="hidden" name="id" value="{{article.id}}">
+            <input type="hidden" name="_method" value="PUT">
             {% endif %}
             <input type="hidden" name="_csrf" value="{{csrf}}">
             <div class="row control-group" style="margin: 0 60px;" >
