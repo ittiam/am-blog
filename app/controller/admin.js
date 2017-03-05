@@ -34,9 +34,11 @@ exports.editor = function* () {
   if (articleID && article) {
     isNew = false;
   }
+
   yield this.render('admin/editor.html', {
     article,
     isNew,
+    csrf: this.csrf,
     login: this.session.login,
   });
 
