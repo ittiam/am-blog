@@ -35,7 +35,7 @@ module.exports = app => {
       const user = yield app.mysql.select('site', {
         where: {
           email,
-          password: md5Password,
+          password: password,
         },
       });
 
