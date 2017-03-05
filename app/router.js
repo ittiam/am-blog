@@ -12,7 +12,7 @@ module.exports = app => {
   app.put('/article', admin, app.controller.article.update);
   app.delete('/article', admin, app.controller.article.deleteArticle);
 
-  app.post('/upload', app.controller.article.upload);
+  app.post('/upload', app.controller.upload);
 
   app.get('/manager', install, admin, app.controller.admin.manager);
   app.get('/editor', install, admin, app.controller.admin.editor);

@@ -1,12 +1,16 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
+const moment = require('moment');
 const sendToWormhole = require('stream-wormhole');
 
 module.exports = function* () {
   const stream = yield this.getFileStream();
-  let filepath = path.join(this.app.config.baseDir, `logs/${stream.filename}`);
+  let destDir = moment(Date.now()).format('YYYY-MM-DD');
+  let destPath = path.join(this.app.config.baseDir, 'app/public/upload', destDir);
+  let filepath = path.join(destPath, stream.filename);
 
-  this.logger.warn('Saving %s to %s', stream.filename, filepath);
+  fs.mkdirsSync(destPath);
+
   try {
     yield saveStream(stream, filepath);
   } catch (err) {
@@ -15,10 +19,12 @@ module.exports = function* () {
   }
 
   this.body = {
-    file: stream.filename,
-    fields: stream.fields,
+    success: 1,
+    message: '上传成功',
+    url: '/public/upload/' + destDir + '/' + stream.filename
   };
 };
+
 
 function saveStream(stream, filepath) {
   return new Promise((resolve, reject) => {
