@@ -24,15 +24,21 @@ exports.userrole = {
   },
 };
 
-exports.qnStore = {
-  accessKey: 'your access key',
-  secretKey: 'your secret key',
-  bucket: 'your bucket name',
-  origin: 'http://xx.xx.xx.glb.clouddn.com',
-  // timeout: 3600000, // default rpc timeout: one hour, optional
-  // if your app outside of China, please set `uploadURL` to `http://up.qiniug.com/`
-  // uploadURL: 'http://up.qiniu.com/'
-};
+exports.storage = {
+  active: 'localStore',
+  localStore: {
+    destPath: 'app/public/upload'
+  },
+  qnStore: {
+    accessKey: 'your access key',
+    secretKey: 'your secret key',
+    bucket: 'your bucket name',
+    origin: 'http://xx.xx.xx.glb.clouddn.com',
+    // timeout: 3600000, // default rpc timeout: one hour, optional
+    // if your app outside of China, please set `uploadURL` to `http://up.qiniug.com/`
+    // uploadURL: 'http://up.qiniu.com/'
+  }
+}
 
 exports.localStore = {
   destPath: 'app/public/upload'
