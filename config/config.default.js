@@ -35,7 +35,7 @@ exports.qnStore = {
 };
 
 exports.localStore = {
-
+  destPath: 'app/public/upload'
 };
 
 exports.onerror = {

@@ -3,11 +3,13 @@ const path = require('path');
 const moment = require('moment');
 const sendToWormhole = require('stream-wormhole');
 const crypto = require('crypto');
+const qn = require('qn');
+
+// var client = qn.create(this.options);
 
 var fileKey = {
   // use Qiniu hash as file basename, if set, `safeString` will be ignored
   hashAsBasename: false,
-  safeString: true, // use safaString util to rename filename, e.g. Chinese to Pinyin
   prefix: 'YYYY/MM/', // {String | Function} will be formated by moment.js, using `[]` to escape,
   suffix: '', // {String | Function} string added before file extname.
   extname: true // keep file's extname
@@ -38,6 +40,18 @@ exports.local = function* () {
 exports.qiniu = function* () {
 
 };
+
+function saveQnStream(stream) {
+  return new Promise(function(resolve, reject) {
+    getFileKey(file).then((function(key) {
+      client.upload(stream, {
+        key: key
+      }, function(err, result) {
+        err ? reject(err) : resolve(result.url);
+      });
+    }));
+  });
+}
 
 
 function saveStream(stream, filepath) {
@@ -99,45 +113,40 @@ function getHash (stream) {
   });
 }
 
-function getFileKey(stream, keyOptions) {
-  var fileKey = null;
+function getFileKey(stream, options) {
+  var keyOptions = Object.assign({
+    hashAsBasename: false,
+    prefix: 'YYYY/MM/',
+    suffix: '',
+    extname: true
+  }, options);
 
-  if (keyOptions) {
-    var getValue = function(obj) {
-      return typeof obj === 'function' ? obj() : obj;
-    };
-    var ext = path.extname(stream.filename);
-    var basename = path.basename(stream.filename, ext);
-    var prefix = '';
-    var suffix = '';
-    var extname = '';
+  var getValue = function(obj) {
+    return typeof obj === 'function' ? obj() : obj;
+  };
 
-    if (keyOptions.prefix) {
-      prefix = moment().format(getValue(keyOptions.prefix)).replace(/^\//, '');
-    }
+  var ext = path.extname(stream.filename);
+  var basename = path.basename(stream.filename, ext);
+  var prefix = '';
+  var extname = '';
 
-    if (keyOptions.suffix) {
-      suffix = getValue(keyOptions.suffix)
-    }
-
-    if (keyOptions.extname !== false) {
-      extname = ext.toLowerCase();
-    }
-
-    var contactKey = function(name) {
-      return prefix + name + suffix + extname;
-    };
-
-    if (keyOptions.hashAsBasename) {
-      return getHash(stream).then(function(hash) {
-        return contactKey(hash);
-      });
-    } else if (keyOptions.safeString) {
-      basename = utils.safeString(basename);
-    }
-
-    fileKey = contactKey(basename);
+  if (keyOptions.prefix) {
+    prefix = moment().format(getValue(keyOptions.prefix)).replace(/^\//, '');
   }
 
-  return Promise.resolve(fileKey);
+  if (keyOptions.extname) {
+    extname = ext.toLowerCase();
+  }
+
+  var contactKey = function(name) {
+    return prefix + name + keyOptions.suffix + ext.toLowerCase();
+  };
+
+  if (keyOptions.hashAsBasename) {
+    return getHash(stream).then(function(hash) {
+      return contactKey(hash);
+    });
+  }
+
+  return Promise.resolve(contactKey(basename));
 }
