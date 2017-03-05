@@ -24,8 +24,8 @@ exports.index = function* () {
 exports.add = function* () {
   const title = this.request.body.title;
   const content = this.request.body.content;
-  const sub_title = this.request.body.sub_title;
-  yield this.service.article.insert(title, content, sub_title);
+  const slug = this.request.body.slug;
+  yield this.service.article.insert(title, content, slug);
 
   this.redirect('manager');
 

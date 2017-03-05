@@ -1,36 +1,24 @@
-# ************************************************************
-# Sequel Pro SQL dump
-# Version 4541
-#
-# http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
-#
-# Host: 127.0.0.1 (MySQL 5.7.14)
-# Database: amblog
-# Generation Time: 2017-03-04 22:34:43 +0000
-# ************************************************************
-
+-- --------------------------------------------------------
+-- 主机:                           127.0.0.1
+-- 服务器版本:                        5.7.17-log - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win64
+-- HeidiSQL 版本:                  9.4.0.5125
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
-# Dump of table articles
-# ------------------------------------------------------------
-
+-- 导出  表 amblog.articles 结构
 DROP TABLE IF EXISTS `articles`;
-
-CREATE TABLE `articles` (
-  `tid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'post表主键',
+CREATE TABLE IF NOT EXISTS `articles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'post表主键',
   `title` varchar(200) DEFAULT NULL COMMENT '文章标题',
   `slug` varchar(200) DEFAULT NULL COMMENT '文章缩略名',
-  `created` int(10) unsigned DEFAULT '0' COMMENT '文章生成时的GMT unix时间戳',
-  `modified` int(10) unsigned DEFAULT '0' COMMENT '文章更改时的GMT unix时间戳',
+  `created` datetime DEFAULT NULL COMMENT '文章生成时的时间',
+  `modified` datetime DEFAULT NULL COMMENT '文章更改时的时间',
   `content` text COMMENT '文章内容',
   `author_id` int(10) unsigned DEFAULT '0' COMMENT '文章所属用户id',
   `type` varchar(16) DEFAULT 'post' COMMENT '文章类别',
@@ -42,19 +30,21 @@ CREATE TABLE `articles` (
   `allow_comment` tinyint(1) DEFAULT '1' COMMENT '是否允许评论',
   `allow_ping` tinyint(1) DEFAULT '1' COMMENT '是否允许ping',
   `allow_feed` tinyint(1) DEFAULT '1' COMMENT '允许出现在聚合中',
-  PRIMARY KEY (`tid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `created` (`created`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='内容表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章表';
 
+-- 正在导出表  amblog.articles 的数据：0 rows
+DELETE FROM `articles`;
+/*!40000 ALTER TABLE `articles` DISABLE KEYS */;
+INSERT INTO `articles` (`id`, `title`, `slug`, `created`, `modified`, `content`, `author_id`, `type`, `status`, `tags`, `categories`, `hits`, `comments_num`, `allow_comment`, `allow_ping`, `allow_feed`) VALUES
+	(1, 'Hello world', '', '2017-03-05 13:52:28', '2017-03-05 13:52:28', '### Hello world!', 0, 'post', 'publish', NULL, NULL, 0, 0, 1, 1, 1);
+/*!40000 ALTER TABLE `articles` ENABLE KEYS */;
 
-
-# Dump of table site
-# ------------------------------------------------------------
-
+-- 导出  表 amblog.site 结构
 DROP TABLE IF EXISTS `site`;
-
-CREATE TABLE `site` (
+CREATE TABLE IF NOT EXISTS `site` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) DEFAULT NULL COMMENT '网站名称',
   `email` varchar(200) DEFAULT NULL COMMENT '用户邮箱',
@@ -62,14 +52,10 @@ CREATE TABLE `site` (
   `about` varchar(200) DEFAULT NULL,
   `sub_name` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+/*!40000 ALTER TABLE `site` ENABLE KEYS */;
 
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
