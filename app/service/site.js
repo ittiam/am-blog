@@ -5,12 +5,12 @@ const crypto = require('crypto');
 module.exports = app => {
   class MonthServer extends app.Service {
     * insert(name, email, password, about, sub_name) {
-      // const md5Password = crypto.createHash('md5').update(password).digest('hex');
+      const md5Password = crypto.createHash('md5').update(password).digest('hex');
 
       const result = yield app.mysql.insert('site', {
         name,
         email,
-        password,
+        password: md5Password,
         about,
         sub_name,
       });
@@ -35,7 +35,7 @@ module.exports = app => {
       const user = yield app.mysql.select('site', {
         where: {
           email,
-          password: password,
+          password: md5Password,
         },
       });
 
