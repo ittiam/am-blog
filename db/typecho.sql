@@ -122,7 +122,7 @@ LOCK TABLES `t_options` WRITE;
 
 INSERT INTO `t_options` (`name`, `value`, `description`)
 VALUES
-	('site_title','Tale博客系统',''),
+	('site_title','Am Blog 博客系统',''),
 	('social_weibo','',NULL),
 	('social_zhihu','',NULL),
 	('social_github','',NULL),

@@ -8,6 +8,8 @@ const installRule = {
     type: 'string',
   },
   email: {
+    required: false,
+    allowEmpty: true,
     type: 'email',
   },
   password: {
@@ -17,8 +19,6 @@ const installRule = {
     type: 'string',
   },
   url: {
-    required: false,
-    allowEmpty: true,
     type: 'string',
   },
 };
