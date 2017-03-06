@@ -1,9 +1,20 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 
 module.exports = app => {
   class MonthServer extends app.Service {
+    * init() {
+      try {
+        fs.writeFileSync(path.join(this.app.config.baseDir, 'install.lock'), '');
+        this.app.INSTALL = true;
+      } catch (err) {
+        throw new Error('初始化站点失败');
+      }
+    }
+
     * insert(name, email, password, about, sub_name) {
       const md5Password = crypto.createHash('md5').update(password).digest('hex');
 
