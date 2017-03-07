@@ -20,7 +20,7 @@ module.exports = app => {
   app.get('/login', install, app.controller.site.login);
   app.get('/logout', app.controller.site.logout);
   app.get('/install', app.controller.install.index);
-  app.post('/install', app.controller.site.install);
+  app.post('/install', app.controller.install.doInstall);
   app.get('/about', install, app.controller.site.about);
   app.get('/contact', install, app.controller.site.contact);
   app.get('/500', app.controller.site.error);

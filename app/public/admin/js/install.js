@@ -48,6 +48,7 @@
                         url: '/install',
                         data: params,
                         success: function (result) {
+                          console.log(result)
                             if (result && result.success) {
                                 isValid = true;
                             } else {

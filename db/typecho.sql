@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.14)
 # Database: typecho
-# Generation Time: 2017-03-06 14:05:23 +0000
+# Generation Time: 2017-03-07 09:41:18 +0000
 # ************************************************************
 
 
@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS `t_comments`;
 CREATE TABLE `t_comments` (
   `coid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'comment表主键',
   `cid` int(10) unsigned DEFAULT '0' COMMENT 'post表主键,关联字段',
-  `created` datetime DEFAULT NULL COMMENT '评论生成时的时间戳',
+  `created` datetime DEFAULT NULL COMMENT '评论生成时间',
   `author` varchar(200) DEFAULT NULL COMMENT '评论作者',
   `author_id` int(10) unsigned DEFAULT '0' COMMENT '评论所属用户id',
   `owner_id` int(10) unsigned DEFAULT '0' COMMENT '评论所属内容作者id',
@@ -56,8 +56,8 @@ CREATE TABLE `t_contents` (
   `cid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'post表主键',
   `title` varchar(200) DEFAULT NULL COMMENT '内容标题',
   `slug` varchar(200) DEFAULT NULL COMMENT '内容缩略名',
-  `created` datetime DEFAULT NULL COMMENT '内容生成时的GMT unix时间戳',
-  `modified` datetime DEFAULT NULL COMMENT '内容更改时的GMT unix时间戳',
+  `created` datetime DEFAULT NULL COMMENT '内容生成时间',
+  `modified` datetime DEFAULT NULL COMMENT '内容更改时间',
   `content` text COMMENT '内容文字',
   `author_id` int(10) unsigned DEFAULT '0' COMMENT '内容所属用户id',
   `type` varchar(16) DEFAULT 'post' COMMENT '内容类别',
@@ -122,7 +122,6 @@ LOCK TABLES `t_options` WRITE;
 
 INSERT INTO `t_options` (`name`, `value`, `description`)
 VALUES
-	('site_title','Am Blog 博客系统',''),
 	('social_weibo','',NULL),
 	('social_zhihu','',NULL),
 	('social_github','',NULL),
@@ -170,7 +169,7 @@ CREATE TABLE `t_users` (
   `email` varchar(200) DEFAULT NULL COMMENT '用户的邮箱',
   `home_url` varchar(200) DEFAULT NULL COMMENT '用户的主页',
   `screen_name` varchar(32) DEFAULT NULL COMMENT '用户显示的名称',
-  `created` datetime DEFAULT NULL COMMENT '用户注册时的时间戳',
+  `created` datetime DEFAULT NULL COMMENT '用户注册时间',
   `activated` datetime DEFAULT NULL COMMENT '最后活动时间',
   `logged` datetime DEFAULT NULL COMMENT '上次登录最后活跃时间',
   `group_name` varchar(16) DEFAULT 'visitor' COMMENT '用户组',
@@ -178,7 +177,6 @@ CREATE TABLE `t_users` (
   UNIQUE KEY `name` (`username`),
   UNIQUE KEY `mail` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户表';
-
 
 
 

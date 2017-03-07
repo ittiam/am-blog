@@ -37,11 +37,29 @@ exports.storage = {
     // timeout: 3600000, // default rpc timeout: one hour, optional
     // if your app outside of China, please set `uploadURL` to `http://up.qiniug.com/`
     // uploadURL: 'http://up.qiniu.com/'
-  }
-}
+  },
+};
 
 exports.localStore = {
-  destPath: 'app/public/upload'
+  destPath: 'app/public/upload',
+};
+
+exports.TYPES = {
+  TAG: 'tag',
+  CATEGORY: 'category',
+  ARTICLE: 'post',
+  PUBLISH: 'publish',
+  PAGE: 'page',
+  DRAFT: 'draft',
+  LINK: 'link',
+};
+
+exports.GROUP = {
+  ADMINISTRATOR: 'administrator',
+  EDITOR: 'editor',
+  CONTRIBUTOR: 'contributor',
+  SUBSCRIBER: 'subscriber',
+  VISITOR: 'visitor',
 };
 
 exports.onerror = {

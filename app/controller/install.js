@@ -4,21 +4,21 @@ const fs = require('fs');
 const path = require('path');
 
 const installRule = {
-  name: {
+  admin_user: {
     type: 'string',
   },
-  email: {
-    required: false,
-    allowEmpty: true,
+  admin_email: {
     type: 'email',
   },
-  password: {
+  admin_pwd: {
     type: 'password',
+    min: 6,
+    max: 14,
   },
-  title: {
+  site_title: {
     type: 'string',
   },
-  url: {
+  site_url: {
     type: 'string',
   },
 };
@@ -38,7 +38,24 @@ exports.index = function* () {
 };
 
 exports.doInstall = function* () {
-  const errors = this.validator.validate(installRule);
+  this.validate(installRule);
 
-  this.service.site.init();
+  let siteUrl = this.request.body.site_url;
+  if (siteUrl[siteUrl.length - 1] === '/') {
+    siteUrl = siteUrl.substring(0, siteUrl.length - 1);
+  }
+  if (siteUrl.indexOf('http') !== 0) {
+    siteUrl = 'http://' + siteUrl;
+  }
+
+  yield this.service.user.insert(this.request.body.admin_user, this.request.body.admin_pwd, this.request.body.admin_email, 'administrator');
+  yield this.service.option.insert('site_title', this.request.body.site_title);
+  yield this.service.option.insert('site_url', siteUrl);
+
+  yield this.service.site.init();
+
+  this.body = {
+    success: 1,
+    msg: '安装成功',
+  };
 };

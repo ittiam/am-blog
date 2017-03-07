@@ -57,7 +57,7 @@ exports.error = function* () {
 
 exports.startInstall = function* () {
   yield this.render('install.html', {
-    isInstall: this.isInstall
+    isInstall: this.isInstall,
   });
 };
 
@@ -74,6 +74,7 @@ exports.install = function* () {
   const password = this.request.body.password;
   const about = this.request.body.about;
   const sub_name = this.request.body.sub_name;
+
   yield this.service.site.insert(name, email, password, about, sub_name);
 
   this.redirect('/manager');
