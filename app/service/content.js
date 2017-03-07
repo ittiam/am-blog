@@ -20,6 +20,14 @@ module.exports = app => {
 
       return articles;
     }
+
+    * publish() {
+
+    }
+
+    * update() {
+
+    }
   }
   return ContentServer;
 };

@@ -39,4 +39,4 @@ module.exports = app => {
   }
 
   return AuthController;
-}
+};

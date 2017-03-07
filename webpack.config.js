@@ -16,7 +16,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'app/public/admin'),
-    filename: 'js/app.js',
+    filename: 'js/manage.js',
     publicPath: '/public/admin/',
     chunkFilename: '[name].js'
   },
