@@ -19,6 +19,19 @@ module.exports = app => {
       return result.affectedRows === 1;
     }
 
+    * login(username, password) {
+      const md5Password = crypto.createHash('md5').update(password).digest('hex');
+
+      const user = yield app.mysql.select('t_users', {
+        where: {
+          username,
+          password: md5Password,
+        },
+      });
+
+      return user.length;
+    }
+
   }
 
   return UserService;

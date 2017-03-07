@@ -1,81 +1,61 @@
 'use strict';
 
 const installRule = {
-  name: {
+  admin_user: {
     type: 'string',
   },
-  email: {
+  admin_email: {
     type: 'email',
   },
-  password: {
+  admin_pwd: {
     type: 'password',
+    min: 6,
+    max: 14,
   },
-  about: {
-    required: false,
-    allowEmpty: true,
+  site_title: {
     type: 'string',
   },
-  sub_name: {
-    required: false,
-    allowEmpty: true,
+  site_url: {
     type: 'string',
   },
 };
 
-exports.contact = function* () {
-  yield this.render('contact.html');
+exports.install = function* () {
+  yield this.render('admin/install', {
+    isInstall: this.INSTALL,
+  });
 };
 
-exports.login = function* () {
-  const login = this.session.login;
+exports.doInstall = function* () {
+  this.validate(installRule);
 
-  if (login) {
-    this.redirect('/manager');
-  } else {
-    yield this.render('admin/login.html');
+  let siteUrl = this.request.body.site_url;
+  if (siteUrl[siteUrl.length - 1] === '/') {
+    siteUrl = siteUrl.substring(0, siteUrl.length - 1);
+  }
+  if (siteUrl.indexOf('http') !== 0) {
+    siteUrl = 'http://' + siteUrl;
   }
 
-};
+  yield {
+    user: this.service.user.insert(this.request.body.admin_user, this.request.body.admin_pwd, this.request.body.admin_email, 'administrator'),
+    title: this.service.option.insert('site_title', this.request.body.site_title),
+    url: this.service.option.insert('site_url', siteUrl),
+  };
 
-exports.logout = function* () {
-  this.session.login = false;
+  yield this.service.site.init();
 
-  yield this.render('admin/login.html');
-
-};
-
-exports.about = function* () {
-  const site = yield this.service.site.getSite();
-  yield this.render('about.html', {
-    about: site.length ? site[0].about : '',
-  });
+  this.body = {
+    success: 1,
+    msg: '安装成功',
+  };
 };
 
 exports.error = function* () {
   yield this.render('500.html');
 };
 
-exports.startInstall = function* () {
-  yield this.render('install.html', {
-    isInstall: this.isInstall,
-  });
-};
-
 exports.notFound = function* () {
   this.status = 404;
   yield this.render('404.html');
-};
-
-exports.install = function* () {
-  this.validate(installRule);
-
-  const name = this.request.body.name;
-  const email = this.request.body.email;
-  const password = this.request.body.password;
-  const about = this.request.body.about;
-  const sub_name = this.request.body.sub_name;
-
-  yield this.service.site.insert(name, email, password, about, sub_name);
-
-  this.redirect('/manager');
 };

@@ -1,17 +1,27 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
 // 判断是否已经安装博客
-
-module.exports = (options, app) => {
+module.exports = (options) => {
   return function* install(next) {
-    if (this.isInstall) {
+    if (this.INSTALL) {
       yield next;
     }
-    const isInstallByDB = yield this.service.site.count();
 
-    if (isInstallByDB) {
-      this.isInstall = true;
-      yield next;
-    } else {
-      this.redirect('/install');
+    let existInstall = false;
+    try {
+      fs.statSync(path.join(this.app.config.baseDir, 'install.lock'));
+      existInstall = true;
+    } catch (err) {
+      existInstall = false;
     }
+
+    if (existInstall) {
+      this.INSTALL = true;
+    }
+
+    yield next;
   }
-}
+};
